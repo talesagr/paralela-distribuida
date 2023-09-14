@@ -12,7 +12,7 @@ public class Bus {
 
     public static void main(String[] args) throws Exception {
         Socket socket = new Socket("localhost", 1234);
-        System.out.println("Connection succeed");
+        System.out.println("Bus -> Connection succeed");
 
         Thread threadSend = new Thread(new Runnable() {
             @Override

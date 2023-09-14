@@ -40,7 +40,7 @@ public class Server {
 
                         // Send the random number to the client
                         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                        out.println("Random Number: " + busNumber);
+                        out.println("Bus Number: " + busNumber);
 
                         System.out.println("Received: " + busNumber);
 
