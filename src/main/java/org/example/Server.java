@@ -31,28 +31,8 @@ public class Server {
                 Socket socket = this.server.accept();
                 System.out.println("New client on port: " + socket.getPort());
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String clientInput;
-
-                while ((clientInput = reader.readLine()) != null) {
-                    try {
-                        int busNumber = Integer.parseInt(clientInput);
-
-                        // Send the random number to the client
-                        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                        out.println("Bus Number: " + busNumber);
-
-                        System.out.println("Received: " + busNumber);
-
-                        // Example to send the manipulated number back to the client if needed
-                        // PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                        // out.println("Manipulated Number: " + manipulatedNumber);
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid input from client: " + clientInput);
-                    }
-                }
-
-                socket.close();
+                ClientHandler clientHandler = new ClientHandler(socket);
+                threadPool.execute(clientHandler);
             } catch (IOException e) {
                 System.out.println("IOException: " + e.getMessage());
             }
