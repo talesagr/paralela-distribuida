@@ -1,5 +1,7 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -50,4 +53,25 @@ public class Server {
         server.runServer();
     }
 
+    static void numberGenerator(Socket socket, String ID, ObjectMapper objectMapper) throws IOException {
+        System.out.println("Client " + ID + " -> Connection succeed");
+
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+        Random random = new Random();
+
+        HashMap<String, Integer> dataToSend = new HashMap<>();
+
+        for (int i = 0; i < 6; i++) {
+            int randomNumber = random.nextInt(101);
+            dataToSend.put(ID, randomNumber); // Usando a identificação única como chave
+            String json = objectMapper.writeValueAsString(dataToSend);
+
+            out.println(json);
+
+            System.out.println("Data sent to server from Client " + ID + ": " + json);
+        }
+        socket.close();
+        System.out.println("Closing socket for Client " + ID);
+    }
 }

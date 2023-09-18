@@ -8,19 +8,17 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Random;
 
-import static org.example.Server.numberGenerator;
+public class Client implements DataSendingStrategy {
 
-public class Bus implements DataSendingStrategy{
     private static ObjectMapper objectMapper = new ObjectMapper();
-    private String busID;
+    private String clientID;
 
-    public Bus(String busID) {
-        this.busID = busID;
+    public Client(String clientID) {
+        this.clientID = clientID;
     }
 
     @Override
     public void sendData(Socket socket) throws IOException {
-        numberGenerator(socket, busID, objectMapper);
+        Server.numberGenerator(socket, clientID, objectMapper);
     }
-
 }

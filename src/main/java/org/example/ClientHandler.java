@@ -1,5 +1,6 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 
 import java.io.BufferedReader;
@@ -9,7 +10,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 @AllArgsConstructor
 public class ClientHandler implements Runnable {
@@ -22,24 +22,25 @@ public class ClientHandler implements Runnable {
             System.out.println("Handling clients!");
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            Random random = new Random();
 
             String clientInput;
             while ((clientInput = reader.readLine()) != null) {
-                // Split the input to get the identifier and data
-                String parts[] = clientInput.split(",");
-                System.out.println(clientInput);
+                // Parse a JSON string into a HashMap
+                ObjectMapper objectMapper = new ObjectMapper();
+                HashMap<String, Integer> data = objectMapper.readValue(clientInput, HashMap.class);
 
+                for (Map.Entry<String, Integer> entry : data.entrySet()) {
+                    String clientId = entry.getKey();
+                    int value = entry.getValue();
 
-//                    if ("BUS".equals(clientInput.get)) {
-//                        // Data from Bus class
-//                        // Process Bus data here
-//                    } else if ("CLIENT".equals(identifier)) {
-//                        // Data from Client class
-//                        // Process Client data here
-//                    } else {
-//                        System.out.println("Unknown identifier: " + identifier);
-//                    }
+                    System.out.println("Received data from Client " + clientId + ": " + value);
+
+                    // Process the data as needed
+                    // ...
+
+                    // Send a response if necessary
+                    // ...
+                }
             }
 
             clientSocket.close();
